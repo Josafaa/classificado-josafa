@@ -47,19 +47,39 @@ class Validation extends BaseConfig
     // Categories
     // --------------------------------------------------------------------
 
-
-    Public $category = [
+    //Removido por mim para não ter problema
+    //Public $category = [
         //verifica e intercepta tem inteligencia para saber que está atualizando e se outra pessoa criar igual n deixa passar só se tiver o mesmo id 
-        'name' => 'required|min_length[3]|max_length[90]|is_unique[categories.name,id,{id}]',
-    ];
+        //'name' => 'required|min_length[3]|max_length[90]|is_unique[categories.name,id,{id}]',
+    //];
     
 
-    public $category_errors = [
-        'name' => [
-            'required'      => 'O nome é obrigatório',
-            'min_length'    => 'Informe pelo menos 3 caractéres no tamanho',
-            'max_length'    => 'Informe no máximo 90 caractéres no tamanho',
-            'is_unique'     => 'Essa categoria já existe',
-        ],
-    ];
+    //public $category_errors = [
+        //'name' => [
+            //'required'      => 'O nome é obrigatório',
+            //'min_length'    => 'Informe pelo menos 3 caractéres no tamanho',
+            //'max_length'    => 'Informe no máximo 90 caractéres no tamanho',
+            //'is_unique'     => 'Essa categoria já existe',
+        //],
+    //];
+
+
+    // --------------------------------------------------------------------
+    // Plans
+    // --------------------------------------------------------------------
+
+    //Removido por mim para não ter problema
+    //Public $plan = [
+       // 'name' => 'required|min_length[3]|max_length[90]|is_unique[plans.name,id,{id}]',
+        //'recorrence' => 'required|in_list[monthly,quarterly,semester,yearly]',
+       // 'value' => 'required',
+        //'description' => 'required',
+    //];
+    
+
+    //public $plan_errors = [
+        //'recorrence' => [
+            //'in_list'      => 'Plans recorrence in_list',
+        //],
+    //];
 }

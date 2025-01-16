@@ -6,7 +6,7 @@ use App\Entities\Category;
 
 class CategoryModel extends MyBaseModel
 {
-    protected $DBGGroup         = 'default';
+    protected $DBGroup          = 'default';
     protected $table            = 'categories';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
@@ -18,7 +18,7 @@ class CategoryModel extends MyBaseModel
         'parent_id',
         'name',
         'slug',
-    ];// Só entra no banco de dados quem estver na lista
+    ]; // Só entra no banco de dados quem estiver na lista
 
     // Dates
     protected $useTimestamps = true;
@@ -32,15 +32,24 @@ class CategoryModel extends MyBaseModel
     protected $beforeInsert   = ['generateSlug'];
     protected $beforeUpdate   = ['escapeDataXSS', 'generateSlug'];
 
-    protected function generateSlug(array $data) : array
-
+    protected function generateSlug(array $data): array
     {
-        if(isset($data['data']['name'])) {
-
-            $data['data']['slug'] = mb_url_title($data['data']['name'], lowercase:true);
-
+        if (isset($data['data']['name'])) {
+            $data['data']['slug'] = mb_url_title($data['data']['name'], '-', true);
         }
 
         return $data;
     }
+
+    public function getParentCategories(int $exceptCategoryID = null): array
+    {
+        if ($exceptCategoryID) {
+            $this->where('id !=', $exceptCategoryID);
+        }
+
+        $this->orderBy('name', 'ASC')->asArray();
+
+        return $this->findAll();
+    }
 }
+

@@ -16,12 +16,13 @@
     <div class="container-fluid" style="padding-top: 20px;">
         <div class="row">
             <div class="col-md-6">
-                <div class="Card shadow-lg" style="padding: 10px">
+                <div class="card shadow-lg" style="padding: 10px">
                     <div class="card-header">
                         <h5><?php echo $title ?? ''; ?></h5>
                         <button  id="createCategoryBtn" type="button" class="btn btn-success btn-sm float-end" >Criar Categoria</button>
                     </div>
                     <div class="card-body">
+                        <a class="btn btn-info btn-sm mt-2 mb-4" href="<?php echo route_to('categories.archived'); ?>">Categorias Arquivadas</a>
                         <table class="table table-borderless" id="datatable">
                             <thead class="bg-dark" style="color: white">
                                 <tr>
@@ -61,7 +62,7 @@
                         <label for="parent_id" class="form-label">Categoria Pai</label>
                         <!-- boxParent será preenchido pelo JS -->
                         <div id="boxParents"></div>
-                        <span class="text-danter error-text parent_id"></span>
+                        <span class="text-danger error-text parent_id"></span>
                     </div>
                 </div>
 
@@ -85,7 +86,7 @@
     <script src="https://cdn.datatables.net/v/bs5/dt-2.1.8/r-3.0.3/datatables.min.js"></script>
     <?php echo $this->include('Manager/Categories/Scripts/_datatable_all'); ?>
     <?php echo $this->include('Manager/Categories/Scripts/_get_category_info'); ?>
-    <?php echo $this->include('Manager/Categories/Scripts/_submit_modal_create_update'); ?>
+    <?php echo $this->include('Manager/Categories/Scripts/_submit_modal_create_update.php'); ?>
     <?php echo $this->include('Manager/Categories/Scripts/_show_modal_to_create'); ?>
     <?php echo $this->include('Manager/Categories/Scripts/_archive_category'); ?>
 

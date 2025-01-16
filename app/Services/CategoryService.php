@@ -25,26 +25,67 @@ class CategoryService
         // Montando a resposta com os dados das categorias
         foreach ($categories as $category) {
             // Montando um botão de ação (apenas um exemplo de como você pode manipular)
-            $btnEdit = form_button([
-                'data-id'   => $category->id,
-                'id'        => 'updateCategoryBtn', // id do html elemente
-                'class'     => 'btn btn-primary btn-sm'
-            ],
-            'Editar'
-        );
-            $btnArchive = form_button([
-                'data_id'   => $category->id,
-                'id'        => 'archiveCategoryBtn', // id do html elemente
-                'class'     => 'btn btn-info btn-sm'
-            ],
-            'Arquivar'
-        );
+            $btnEdit = form_button(
+                [
+                    'data-id'   => $category->id,
+                    'id'        => 'updateCategoryBtn', // id do html elemente
+                    'class'     => 'btn btn-primary btn-sm'
+                ],
+                'Editar'
+            );
+            $btnArchive = form_button(
+                [
+                    'data-id'   => $category->id, // Corrigido para 'data-id'
+                    'id'        => 'archiveCategoryBtn', // id do html elemente
+                    'class'     => 'btn btn-info btn-sm'
+                ],
+                'Arquivar'
+            );
+            
 
             $data[] = [
                 'id'        => $category->id,
                 'name'      => $category->name,  // Certifique-se de que 'name' está correto conforme seu banco
                 'slug'      => $category->slug,
                 'actions'   => $btnEdit . ' ' . $btnArchive,
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getAllArchivedCategories(): array
+    {
+        // Buscando as categorias
+        $categories = $this->categoryModel->asObject()->onlyDeleted()->orderBy('id', 'DESC')->findAll();
+
+        $data = [];
+
+        // Montando a resposta com os dados das categorias
+        foreach ($categories as $category) {
+            // Montando um botão de ação (apenas um exemplo de como você pode manipular)
+            $btnRecover = form_button(
+                [
+                    'data-id'   => $category->id,
+                    'id'        => 'recoverCategoryBtn', // id do html elemente
+                    'class'     => 'btn btn-primary btn-sm'
+                ],
+                'Recuperar'
+            );
+            $btnDelete = form_button(
+                [
+                    'data-id'   => $category->id,
+                    'id'        => 'deleteCategoryBtn', // id do html elemente
+                    'class'     => 'btn btn-danger btn-sm'
+                ],
+                'Excluir'
+            );
+
+            $data[] = [
+                'id'        => $category->id,
+                'name'      => $category->name,  // Certifique-se de que 'name' está correto conforme seu banco
+                'slug'      => $category->slug,
+                'actions'   => $btnRecover . ' ' . $btnDelete,
             ];
         }
 
@@ -70,10 +111,10 @@ class CategoryService
         return $category;
     }
 
-    public function getMultinivel(string $name, $options = [])
+    public function getMultinivel(string $name, $options = [], int $exceptCategoryID = null)
     {
 
-        $array = $this->categoryModel->asArray()->orderBy('id', 'DESC')->findAll();
+        $array = $this->categoryModel->getParentCategories($exceptCategoryID);
 
         $class_form = "";
         if (isset($options['class'])) {
@@ -150,11 +191,52 @@ class CategoryService
                 $this->categoryModel->protect($protect)->save($category); 
             }
         } catch (\Exception $e) {
-            // Aqui seria ideal usar um log ao invés de 'die', para mensagens de erro mais amigáveis
-            log_message('error', 'Erro ao tentar salvar categoria: ' . $e->getMessage());
-            return false;
+            die($e->getMessage());
         }
-        return true; // Adiciona confirmação de sucesso
+    }
+
+    public function tryArchiveCategory(int $id) 
+    {
+        try {
+            // Obtém a categoria com base no ID
+            $category = $this->getCategory($id);
+    
+            // Soft delete, marcando a categoria com o valor de 'deleted_at'
+            $this->categoryModel->delete($category->id); // 'true' faz o Soft Delete
+    
+        } catch (\Exception $e) {
+            // Exibe qualquer erro que ocorra
+            die($e->getMessage());
+        }
+    }
+    public function tryRecoverCategory(int $id) 
+    {
+        try {
+
+            $category = $this->getCategory($id, withDeleted: true);
+
+            $category->recover();
+
+            $this->trySaveCategory($category, protect: false);
+
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function tryDeleteCategory(int $id) 
+    {
+        try {
+            // Obtém a categoria com base no ID, incluindo as categorias arquivadas
+            $category = $this->getCategory($id, withDeleted: true);
+    
+            // Deleta a categoria permanentemente
+            $this->categoryModel->delete($category->id, true); // 'true' garante que a exclusão é permanente
+    
+        } catch (\Exception $e) {
+            // Exibe qualquer erro que ocorra
+            die($e->getMessage());
+        }
     }
 
 }

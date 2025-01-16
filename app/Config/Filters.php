@@ -67,18 +67,26 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, array<string, string>>>|array<string, list<string>>
      */
-    public array $globals = [
-        'before' => [
-            // 'honeypot',
-            'csrf' => ['except' => ['api/*']],
-            // 'invalidchars',
-        ],
-        'after' => [
-            'toolbar' => ['except' => ['api/*']],
+    //Removido por mim para não ter problema
+    //public array $globals = [
+        //'before' => [
+            //- 'honeypot',
+           // 'csrf' => [
+                //'except' => [
+                    //'api/*', // APIs
+                    //'manager/categories/create', // Rota para criar categorias
+                    //'manager/categories/update', // Rota para atualizar categorias
+                    //'manager/categories/delete', // Rota para deletar categorias
+                //]
+            //],
+            //- 'invalidchars',
+        //],
+        //'after' => [
+            //'toolbar' => ['except' => ['api/*']],
             // 'honeypot',
             // 'secureheaders',
-        ],
-    ];
+        //],
+    //];
 
     /**
      * List of filter aliases that works on a

@@ -2,7 +2,7 @@
 
 //TUDO CERTO AQUI NÃO MECHER!
 
-$('#categories-form').submit(function(e) {
+$('#plans-form').submit(function(e) {
 
     e.preventDefault(); // Impede o envio padrão do formulário
 
@@ -16,21 +16,23 @@ $('#categories-form').submit(function(e) {
         dataType: 'JSON', // Resposta esperada no formato JSON
         contentType: false,
         beforeSend: function(){
+
             $(form).find("span.error-text").text(''); // Limpa erros anteriores
+
         },
+
         success: function(response) {
 
-            // Verifique a resposta
-            console.log(response); // Verifica o que está sendo retornado do backend
-
-            window.refreshCSRFToken(response.token);
-
             if (response.success == false) {
+
                 toastr.error('Verifique os erros e tente novamente');
 
                 $.each(response.errors, function(field, value) {
+
                     console.log(field);
+
                     $(form).find('span.' + field).text(value);
+
                 });
 
                 return;
@@ -39,10 +41,7 @@ $('#categories-form').submit(function(e) {
             // Se a categoria foi salva com sucesso
             toastr.success(response.message);
 
-            // Teste de fechamento do modal
-            console.log('Fechando o modal...');
-
-            $('#categoryModal').modal('hide'); // Fechar o modal
+            $('#modalPlan').modal('hide'); // Fechar o modal
 
             $(form)[0].reset(); // Resetar o formulário
 
@@ -50,13 +49,13 @@ $('#categories-form').submit(function(e) {
             $('#dataTable').DataTable().ajax.reload(null, false);
 
             // Resetar o título e a ação do formulário
-            $('.modal-title').text('Criar categoria');
-            $(form).attr('action', '<?php echo route_to('categories.create'); ?>');
+            $('.modal-title').text('Criar Plano');
+            $(form).attr('action', '<?php echo route_to('plans.create'); ?>');
             $(form).find('input[name="id"]').val('');
             $('input[name="_method"]').remove();
         },
         error: function() {
-            alert('Error ajax _submit_modal_create_update.php');
+            alert('Error ajax backend');
         }
     });
 });

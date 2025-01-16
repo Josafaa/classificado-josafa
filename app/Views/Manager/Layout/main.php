@@ -7,7 +7,7 @@
         <meta name="author" content="Lucio Antonio de Souza" />
         
 
-        <meta name="<?php echo csrf_token(); ?>" content="<?php echo csrf_hash(); ?>" class="csrf"/>
+        <meta name="<?php echo csrf_token() ?>" content="<?php echo csrf_hash(); ?>" class="csrf"/>
         <!-- Puxando o noem da Pagina do ,env e o titulo da pagina na direitoa $this-->
         <title><?php echo $this->renderSection('title'); ?><?php echo ' - ' . env('APP_NAME'); ?> </title>
         <!-- Favicon-->
@@ -15,7 +15,15 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="<?php echo site_url('manager_assets/css/styles.css') ?>" rel="stylesheet" />
         <link href="<?php echo site_url('manager_assets/toastr/toastr.min.css') ?>" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/v/bs5/dt-2.1.8/r-3.0.3/datatables.min.css" rel="stylesheet">
         <?php echo $this->renderSection('styles'); ?>
+        <style>
+            .dataTables_scrollHeadInner,
+            .table {
+                width: 100% !Important
+            }
+        </style>
     </head>
     <body>
         <div class="d-flex" id="wrapper">
@@ -25,7 +33,7 @@
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<?php echo route_to('manager'); ?>">Dashboard</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<?php echo route_to('categories'); ?>">Categorias</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<?php echo route_to('plans'); ?>">Planos</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
@@ -67,7 +75,9 @@
         <!-- Core theme JS-->
         <script src="<?php echo site_url('manager_assets/js/scripts.js'); ?> "></script>
         <script src="<?php echo site_url('manager_assets/toastr/toastr.min.js'); ?> "></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.datatables.net/v/bs5/dt-2.1.8/r-3.0.3/datatables.min.js"></script>
         <?php echo $this->renderSection('scripts'); ?>
-        <script>toastr.warning('My name is Inigo Montoya. You killed my father, prepare to die!')</script>
     </body>
 </html>

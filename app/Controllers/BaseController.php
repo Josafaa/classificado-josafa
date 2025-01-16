@@ -35,7 +35,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = ['form'];
+    protected $helpers = ['form', 'number'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.
@@ -60,6 +60,7 @@ abstract class BaseController extends Controller
     {
         $data = $this->request->getPost();
 
+        unset($data['id']);
         unset($data['_method']);
 
         return $data;
